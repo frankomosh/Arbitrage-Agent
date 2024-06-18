@@ -7,6 +7,8 @@ import xgboost as xgb
 import numpy as np
 from dotenv import load_dotenv
 from starknet_py.net import RpcProvider
+from starknet_py.net.gateway_client import GatewayClient as RpcProvider
+from giza.agents import AgentResult, GizaAgent
 from starknet_py.net.models import Account, Call
 from starknet_py.contract import Contract
 from starknet_py.utils import to_hex_string
@@ -42,6 +44,16 @@ MODEL_PATH = "path/to/trained_model.xgb"
 class ArbitrageAgent:
     def __init__(self, model_path):
         self.model = xgb.Booster(model_file=model_path)
+    
+    def create_agent(agent_id: int, chain: str, contracts: dict, account_alias: str):
+        
+      agent = GizaAgent.from_id(
+        id=agent_id,
+        contracts=contracts,
+        chain=chain,
+        account=account_alias,
+    )
+      return agent
 
     def preprocess_data(self, data):
         # Implement data preprocessing logic here
